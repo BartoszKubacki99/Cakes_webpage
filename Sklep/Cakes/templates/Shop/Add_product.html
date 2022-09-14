@@ -1,0 +1,30 @@
+{% extends 'Shop/base.html' %}
+
+{% block content %}
+{% if user.is_superuser%}
+
+<center>
+
+<h1> Add Product :)</h1>
+    <br/><br/>
+    {% if submitted %}
+        Twój produkt został dodany!
+
+    {% else %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <input type="submit" value="Submit" class="btn btn-primary">
+    </form>
+    {% endif %}
+    <br/><br/>
+</center>
+
+{% else %}
+
+{% endif %}
+
+{% endblock %}

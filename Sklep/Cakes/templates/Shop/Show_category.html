@@ -1,0 +1,11 @@
+{% extends 'Shop/base.html' %}
+
+{% block content %}
+<center>
+    {% for category in product.category.all %}
+    <h1>Kategoria: {{ products.category }} </h1>
+    {% endfor %}
+    <br/>
+        {{ products.category }}
+</center>
+{% endblock %}

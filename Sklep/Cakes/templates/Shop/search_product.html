@@ -1,0 +1,18 @@
+{% extends 'Shop/base.html' %}
+
+{% block content %}
+<center>
+    {% if searched %}
+        <h1>Wyniki wyszukiwania dla {{ searched }}</h1>
+        <br/>
+        {% for product in Products %}
+            <a href="{% url 'show-product' product.id %}">{{ product }}</a><br/>
+        {% endfor %}
+
+    {% else %}
+        <h1>Brak zawartości do wyszukania O.o</h1>
+    {% endif %}
+
+
+</center>
+{% endblock %}

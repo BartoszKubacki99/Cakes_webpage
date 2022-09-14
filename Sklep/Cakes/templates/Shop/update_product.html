@@ -1,0 +1,16 @@
+{% extends 'Shop/base.html' %}
+
+{% block content %}
+{% if user.is_superuser %}
+
+<h1>Aktualizacja produktu: {{ product }}</h1>
+<br/><br/>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <br/>
+    <input type="submit" value="Update" class="btn btn-secondary">
+</form>
+
+{% endif %}
+{% endblock %}

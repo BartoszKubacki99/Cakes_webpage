@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}">Torty u Beaty</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Wyloguj</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'register_user' %}">Zarejestruj</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">Zaloguj</a>
+        </li>
+        {% endif %}
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Produkty
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'products-list' %}">Lista Produktów</a></li>
+            {% if user.is_superuser %}
+            <li><a class="dropdown-item" href="{% url 'add-product' %}">Dodaj produkt</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="{% url 'all-products' %}">Wszystkie produkty</a></li>
+          </ul>
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Kategorie
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'category-list' %}">Kategorie</a>
+            {% if user.is_superuser %}
+            <li><a class="dropdown-item" href="{% url 'add-category' %}">Dodaj Kategorie</a></li>
+            {% endif %}
+          </ul>
+      </ul>
+      <form class="d-flex" method="post" action="{% url 'search-product-list' %}">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Szukaj" aria-label="Search" name="searched">
+        <button class="btn btn-outline-success" type="submit">Szukaj</button>
+      </form>
+    </div>
+  </div>
+</nav>
