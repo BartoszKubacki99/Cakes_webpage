@@ -1,0 +1,13 @@
+{% extends 'Shop/base.html' %}
+
+{% block content %}
+<center>
+<h1>Kategorie</h1>
+<br/>
+    {% for category in category_list %}
+        <a href="{% url 'show-category' category.id %}">{{ category }}</a><br/>
+    {% endfor %}
+
+</center>
+{% endblock %}
+

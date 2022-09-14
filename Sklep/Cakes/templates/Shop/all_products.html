@@ -1,0 +1,26 @@
+{% extends 'Shop/base.html' %}
+
+{% block content %}
+<center>
+    <h1>Wszystkie produkty</h1>
+    {% for product in all_products %}
+    <div class="card">
+        <div class="card-header">
+    {% for category in product.category.all %}
+      <strong>{{ category }}</strong>
+      {% endfor %}
+        </div>
+    <div class="card-body">
+        <h5 class="card-title">{{ product }}</h5>
+        <p class="card-text"><ul>
+            <strong>Opis: </strong>{{ product.description }}<br/>
+            <strong>Cena: </strong>{{ product.estimated_price }}zł<br/>
+            </ul>
+        </p>
+    </div>
+    </div>
+        <br/>
+    {% endfor %}
+</center>
+
+{% endblock %}
