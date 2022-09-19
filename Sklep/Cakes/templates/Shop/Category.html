@@ -4,10 +4,23 @@
 <center>
 <h1>Kategorie</h1>
 <br/>
+<table class="table table-striped table-hover table-bordered">
     {% for category in category_list %}
-        <a href="{% url 'show-category' category.id %}">{{ category }}</a><br/>
+        <tr>
+            <td>
+                <a href="{% url 'show-category' category.id %}">{{ category }}</a><br/>
+            </td>
+            {% if user.is_superuser %}
+                <td align="right">
+                    <a href="{% url 'update-category' category.id %}" class="btn btn-outline-secondary btn-sm">
+                        Update</a>
+                    <a href="{% url 'delete-category' category.id %}" class="btn btn-outline-danger btn-sm">
+                        Usuń</a>
+                </td>
+            {% endif %}
+        </tr>
     {% endfor %}
-
+</table>
 </center>
 {% endblock %}
 

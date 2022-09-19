@@ -11,6 +11,8 @@
                 <strong>Kategoria: </strong>{{ category }}<br/>
             {% endfor %}
         </p>
-    </div>
-</div>
+    </div><br/>
+    {% if product.product_image %}
+    <img src="{{ product.product_image.url }}" width="500px">
+    {% endif %}
 {% endblock %}

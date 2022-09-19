@@ -2,10 +2,21 @@
 
 {% block content %}
 <center>
-    {% for category in product.category.all %}
-    <h1>Kategoria: {{ products.category }} </h1>
-    {% endfor %}
-    <br/>
-        {{ products.category }}
+       <h1>Kategoria: {{ category }}</h1>
+        <br/><br/>
+
+    <div class="card mb-3">
+        {% for category in categories %}
+            {% if category.product_image %}
+          <img src="{{ category.product_image.url }}" class="card-img-top" alt="..." width="300px" height="500px">
+            {% endif %}
+          <div class="card-body">
+            <h5 class="card-title"><strong>Nazwa: </strong>{{ category.name }}</h5>
+            <p class="card-text"><strong>Opis: </strong>{{ category.description }}<br/></p>
+            <p class="card-text"><strong>Cena: </strong>{{ category.estimated_price }}zł</p>
+          </div>
+        {% endfor %}
+    </div><br/><br/>
+
 </center>
 {% endblock %}

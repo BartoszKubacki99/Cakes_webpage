@@ -2,7 +2,10 @@ from django.contrib import admin
 from django.urls import path
 from .views import HomeView, ProductsListView, AddProductView,\
     CategoryView, Show_categoryView, SearchProductView, ShowProductView, AllProductsView,\
-    UpdateProductView, DeleteProductView, AddCategoryView
+    UpdateProductView, DeleteProductView, AddCategoryView, AddOrderView, MyOrderView, \
+    OrderAdminView, UpdateOrder, DeleteOrderView, UpdateCategoryView, DeleteCategoryView,\
+    UpdateAdminOrderView
+
 
 urlpatterns = [
     path('', HomeView, name='home'),
@@ -15,7 +18,14 @@ urlpatterns = [
     path('addproduct/', AddProductView, name='add-product'),
     path('category/', CategoryView, name='category-list'),
     path('addcategory/', AddCategoryView, name='add-category'),
+    path('category_update/<category_id>/', UpdateCategoryView, name='update-category'),
+    path('delete_category/<category_id>', DeleteCategoryView, name='delete-category'),
     path('show_category/<category_id>/', Show_categoryView, name='show-category'),
     path('search/', SearchProductView, name='search-product-list'),
-
+    path('AddOrder/', AddOrderView, name='add-order'),
+    path('orderadminview/', OrderAdminView, name='order-view'),
+    path('my_order_view/', MyOrderView, name='my-order-view'),
+    path('update_order/<order_id>/', UpdateOrder, name='update-order'),
+    path('update_admin_order/<order_id>/', UpdateAdminOrderView, name='update-admin-order'),
+    path('delete_order/<order_id>', DeleteOrderView, name='delete-order'),
 ]

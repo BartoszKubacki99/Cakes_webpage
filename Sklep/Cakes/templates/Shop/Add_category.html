@@ -4,9 +4,21 @@
 {% if user.is_superuser%}
 <center>
     <h1>Dodaj Kategorie:</h1>
+<br/><br/>
+    {% if submitted %}
+        Kategoria została dodana!
+    {% else %}
+
+     <form action="" method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <input type="submit" value="Submit" class="btn btn-primary">
+     </form>
 </center>
 
-{% else %}
+    {% endif %}
 
 {% endif %}
 

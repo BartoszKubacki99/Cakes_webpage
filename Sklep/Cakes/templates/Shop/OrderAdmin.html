@@ -1,0 +1,38 @@
+{% extends 'Shop/base.html' %}
+
+{% block content %}
+    {% if user.is_superuser %}
+    <h1>Lista zamówień</h1>
+<br/>
+<table class="table table-striped table-hover table-bordered">
+    {% for order in orders_list %}
+        <tr>
+            <td>
+            <strong>Imię: </strong>{{ order.name }}<br/>
+                <strong>Nazwisko: </strong>{{ order.last_name }}<br/>
+                <strong>Opis: </strong>{{ order.description }}<br/>
+                <strong>Produkt: </strong>{{ order.product }}<br/>
+                <strong>Adres email: </strong>{{ order.email }}<br/>
+                <strong>Nr telefonu: </strong>{{ order.phone }}<br/>
+                <strong>Adres dostawy: </strong>{{ order.adress }}<br/>
+                <strong>Termin: </strong>{{ order.deadline }}<br/>
+                <strong>Manager: </strong>{{ order.manager }}<br/>
+                <strong>Status zamówienia: </strong>{{ order.get_status_display }}<br/>
+            </td>
+
+            {% if user.is_superuser %}
+                    <td align="right">
+                        <a href="{% url 'update-order' order.id %}" class="btn btn-outline-secondary btn-sm">
+                            Update</a>
+                        <a href="{% url 'delete-order' order.id %}" class="btn btn-outline-danger btn-sm">
+                            Usuń</a>
+                    </td>
+            {% endif %}
+
+        </tr>
+    {% endfor %}
+</table>
+    {% else %}
+        <h1>Nie masz tutaj dostępu :C</h1>
+    {% endif %}
+{% endblock %}

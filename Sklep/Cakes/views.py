@@ -1,11 +1,84 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.views import View
 from django.http import HttpResponseRedirect
-from .forms import CreateUserForm, ProductForm
-from django.contrib.auth import authenticate, login, logout
-from .models import Product, Category
+from .forms import  ProductForm, CategoryForm, OrderForm, OrderUpdateForm
+from .models import Product, Category, Order
+
+
+def UpdateOrder(request, order_id):
+    order = Order.objects.get(pk=order_id)
+    form = OrderForm(request.POST or None, request.FILES or None, instance=order)
+    context = {'order': order,
+               'form': form}
+    if form.is_valid():
+        form.save()
+        return redirect('my-order-view')
+
+    return render(request, 'Shop/update_order.html', context)
+
+
+def UpdateAdminOrderView(request, order_id):
+    order = Order.objects.get(pk=order_id)
+    form = OrderUpdateForm(request.POST or None, request.FILES or None, instance=order)
+    context = {'order': order,
+               'form': form}
+    if form.is_valid():
+        form.save()
+        return redirect('my-order-view')
+
+    return render(request, 'Shop/update_admin_order.html', context)
+
+
+def DeleteOrderView(request, order_id):
+    order = Order.objects.get(pk=order_id)
+    order.delete()
+    return redirect('my-order-view')
+
+
+def MyOrderView(request):
+    if request.user.is_authenticated:
+        me = request.user.id
+        orders = Order.objects.filter(manager=me)
+        return render(request, 'Shop/My_orders.html', {"me": me, "orders": orders})
+    else:
+        messages.success(request, ("Nie możesz zobaczyć tej strony "))
+        return redirect('home')
+
+
+def OrderAdminView(request):
+    orders_list = Order.objects.all()
+    context = {'orders_list': orders_list}
+    return render(request, 'Shop/OrderAdmin.html', context)
+
+
+def AddOrderView(request):
+    submitted = False
+    if request.method == "POST":
+        if request.user.is_superuser:
+            form = OrderUpdateForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/AddOrder?submitted=True')
+        else:
+            form = OrderForm(request.POST)
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.manager = request.user
+                order.save()
+                return HttpResponseRedirect('/AddOrder?submitted=True')
+    else:
+        if request.user.is_superuser:
+            form = OrderUpdateForm
+        else:
+            form = OrderForm
+
+        if 'submitted' in request.GET:
+            submitted = True
+
+    return render(request, 'Shop/AddOrder.html',
+                      {'form': form,
+                       'submitted': submitted}
+                      )
 
 
 def DeleteProductView(request, product_id):
@@ -16,7 +89,7 @@ def DeleteProductView(request, product_id):
 
 def UpdateProductView(request, product_id):
     product = Product.objects.get(pk=product_id)
-    form = ProductForm(request.POST or None, instance=product)
+    form = ProductForm(request.POST or None, request.FILES or None, instance=product)
     context = {'product': product,
                'form': form}
     if form.is_valid():
@@ -35,16 +108,53 @@ def SearchProductView(request):
 
 
 def Show_categoryView(request, category_id):
-    products = Product.objects.get(pk=category_id)
-    context = {'products': products,
+    categories = Product.objects.filter(category=category_id)
+    category = Category.objects.get(pk=category_id)
+    context = {'categories': categories,
+               'category': category,
                }
     return render(request, 'Shop/Show_category.html', context)
 
 
 def CategoryView(request):
-    category_list = Category.objects.all().order_by('name')
+    category_list = Category.objects.all()
     context = {'category_list': category_list}
     return render(request, 'Shop/Category.html', context)
+
+
+def UpdateCategoryView(request, category_id):
+    category = Category.objects.get(pk=category_id)
+    form = CategoryForm(request.POST or None, request.FILES or None, instance=category)
+    context = {'category': category,
+               'form': form}
+    if form.is_valid():
+        form.save()
+        return redirect('category-list')
+    return render(request, 'Shop/update_category.html', context)
+
+
+def DeleteCategoryView(request, category_id):
+    category = Category.objects.get(pk=category_id)
+    category.delete()
+    return redirect('category-list')
+
+
+def AddCategoryView(request):
+    submitted = False
+    if request.method == "POST":
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/addcategory?submitted=True')
+    else:
+        form = CategoryForm
+        if 'submitted' in request.GET:
+            submitted = True
+
+    return render(request, 'Shop/Add_category.html',
+                  {'form': form,
+                   'submitted': submitted}
+                  )
 
 
 def AllProductsView(request):
@@ -64,14 +174,10 @@ def ShowProductView(request, product_id):
     return render(request, 'Shop/show_product.html', context)
 
 
-def HomeView(request):
-    return render(request, 'Shop/home.html', {})
-
-
 def AddProductView(request):
     submitted = False
     if request.method == "POST":
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/addproduct?submitted=True')
@@ -85,6 +191,6 @@ def AddProductView(request):
                    'submitted': submitted}
                   )
 
-def AddCategoryView(request):
-    model = Category
-    return render(request, 'Shop/Add_category.html')
+
+def HomeView(request):
+    return render(request, 'Shop/home.html', {})
