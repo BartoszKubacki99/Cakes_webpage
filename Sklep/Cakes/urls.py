@@ -4,7 +4,8 @@ from .views import HomeView, ProductsListView, AddProductView,\
     CategoryView, Show_categoryView, SearchProductView, ShowProductView, AllProductsView,\
     UpdateProductView, DeleteProductView, AddCategoryView, AddOrderView, MyOrderView, \
     OrderAdminView, UpdateOrder, DeleteOrderView, UpdateCategoryView, DeleteCategoryView,\
-    UpdateAdminOrderView
+    UpdateAdminOrderView, IngredientsListView, UpdateIngredientView, DeleteIngredientView,\
+    AddIngredientView, ShowIngredientView
 
 
 urlpatterns = [
@@ -28,4 +29,9 @@ urlpatterns = [
     path('update_order/<order_id>/', UpdateOrder, name='update-order'),
     path('update_admin_order/<order_id>/', UpdateAdminOrderView, name='update-admin-order'),
     path('delete_order/<order_id>', DeleteOrderView, name='delete-order'),
+    path('ingredientslist/', IngredientsListView,  name='ingredients-list'),
+    path('update_ingredient/<ingredient_id>/', UpdateIngredientView, name='update-ingredient'),
+    path('delete_ingredient/<ingredient_id>/', DeleteIngredientView, name='delete-ingredient'),
+    path('add_ingredient/', AddIngredientView, name='add-ingredient'),
+    path('show_ingredient/<ingredient_id>/', ShowIngredientView, name='show-ingredient'),
 ]

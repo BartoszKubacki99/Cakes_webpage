@@ -1,18 +1,24 @@
 {% extends 'Shop/base.html' %}
 
 {% block content %}
-
-    <div class="card-body">
-        <h5 class="card-title">{{ product }}</h5>
-        <p class="card-text">
-            <strong>Opis: </strong>{{ product.description }}<br/>
+<div class="card" style="width: 500px">
+        {% if product.product_image %}
+  <img src="{{ product.product_image.url }}" width="500px" class="card-img-top" alt="...">
+        {% endif %}
+  <div class="card-body">
+    <h5 class="card-title">{{ product }}</h5>
+    <p class="card-text"><strong>Opis: </strong>{{ product.description }}<br/>
             <strong>Cena: </strong>{{ product.estimated_price }}zł<br/>
-            {% for category in product.category.all %}
-                <strong>Kategoria: </strong>{{ category }}<br/>
-            {% endfor %}
-        </p>
-    </div><br/>
-    {% if product.product_image %}
-    <img src="{{ product.product_image.url }}" width="500px">
-    {% endif %}
+            <strong>Kategoria: </strong>{{ product.category }}<br/>
+            <strong>Składniki: </strong><br/>
+            {% for ingredient in product.ingredients_list.all%}
+                    {{ ingredient }}<br/>
+            {% endfor %}</p>
+        {% if user.is_superuser %}
+      <a href="#" class="btn btn-primary">Dodaj składnik</a>
+      <a href="#" class="btn btn-primary">Edytuj</a>
+      <a href="#" class="btn btn-primary">Usuń<a/>
+        {% endif %}
+  </div>
+</div>
 {% endblock %}

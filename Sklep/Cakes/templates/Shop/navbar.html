@@ -29,6 +29,10 @@
             <li><a class="dropdown-item" href="{% url 'add-product' %}">Dodaj produkt</a></li>
             {% endif %}
             <li><a class="dropdown-item" href="{% url 'all-products' %}">Wszystkie produkty</a></li>
+            <li><a class="dropdown-item" href="{% url 'ingredients-list' %}">Lista Składników</a></li>
+            {% if user.is_superuser %}
+            <li><a class="dropdown-item" href="{% url 'add-ingredient' %}">Dodaj Składnik</a></li>
+            {% endif %}
           </ul>
           <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

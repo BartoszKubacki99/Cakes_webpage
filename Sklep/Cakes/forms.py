@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Product, Category, Order
+from .models import Product, Category, Order, Ingredients
 
 class CreateUserForm(UserCreationForm):
     class Meta:
@@ -60,6 +60,21 @@ class OrderUpdateForm(ModelForm):
         }
 
 
+class IngredientForm(ModelForm):
+    class Meta:
+        model = Ingredients
+        fields = '__all__'
+        labels = {
+            'name': '',
+            'description': '',
+            'product': '',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nazwa'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Opis produktu'}),
+            'product': forms.SelectMultiple(attrs={'class': 'form-control', 'placeholder': 'W produkcie:'}),
+        }
+
 
 class ProductForm(ModelForm):
     class Meta:
@@ -71,11 +86,14 @@ class ProductForm(ModelForm):
             'estimated_price': '',
             'category': 'Kategoria',
             'product_image': '',
+            'ingredients_list': 'Składniki (Przytrzymaj ctrl aby dodać więcej niż jeden składnik)'
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nazwa'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Opis produktu'}),
             'estimated_price': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Cena'}),
+            'ingredients_list': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'})
         }
 
 

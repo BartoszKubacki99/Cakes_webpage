@@ -14,6 +14,10 @@
             <h5 class="card-title"><strong>Nazwa: </strong>{{ category.name }}</h5>
             <p class="card-text"><strong>Opis: </strong>{{ category.description }}<br/></p>
             <p class="card-text"><strong>Cena: </strong>{{ category.estimated_price }}zł</p>
+              <p class="card-text"><strong>Składniki</strong>
+                  {% for inredients in category.ingredients_list.all %}
+                    {{ inredients }},
+                  {% endfor %}</p>
           </div>
         {% endfor %}
     </div><br/><br/>

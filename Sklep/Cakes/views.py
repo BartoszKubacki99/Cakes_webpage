@@ -1,13 +1,68 @@
+import json
+
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
-from .forms import  ProductForm, CategoryForm, OrderForm, OrderUpdateForm
-from .models import Product, Category, Order
+from django.http import HttpResponseRedirect, HttpResponse
+from .forms import ProductForm, CategoryForm, OrderForm, OrderUpdateForm, IngredientForm
+from .models import Product, Category, Order, Ingredients
+
+
+
+
+
+def IngredientsListView(request):
+    ingredients_list = Ingredients.objects.all()
+    return render(request, 'Shop/Ingredients_list.html', {'ingredients_list': ingredients_list})
+
+
+def ShowIngredientView(request, ingredient_id):
+    Ingredient = Ingredients.objects.get(pk=ingredient_id)
+    product_list = Product.objects.filter(ingredients_list=ingredient_id)
+    context = {'Ingredient': Ingredient,
+               'product_list': product_list,
+               }
+    return render(request, 'Shop/show_ingredient.html', context)
+
+def AddIngredientView(request):
+    submitted = False
+    if request.method == "POST":
+        form = IngredientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/add_ingredient?submitted=True')
+    else:
+        form = IngredientForm
+        if 'submitted' in request.GET:
+            submitted = True
+
+    return render(request, 'Shop/Add_Ingredients.html',
+                  {'form': form,
+                   'submitted': submitted}
+                  )
+
+
+def UpdateIngredientView(request, ingredient_id):
+    ingredient = Ingredients.objects.get(pk=ingredient_id)
+    form = IngredientForm(request.POST or None, instance=ingredient)
+    context = {'ingredient': ingredient,
+               'form': form}
+    if form.is_valid():
+        form.save()
+        return redirect('ingredients-list')
+
+    return render(request, 'Shop/update_ingredients.html', context)
+
+
+def DeleteIngredientView(request, ingredient_id):
+    ingredient = Ingredients.objects.get(pk=ingredient_id)
+    ingredient.delete()
+    return redirect('ingredients-list')
+
 
 
 def UpdateOrder(request, order_id):
     order = Order.objects.get(pk=order_id)
-    form = OrderForm(request.POST or None, request.FILES or None, instance=order)
+    form = OrderForm(request.POST or None, instance=order)
     context = {'order': order,
                'form': form}
     if form.is_valid():
@@ -19,7 +74,7 @@ def UpdateOrder(request, order_id):
 
 def UpdateAdminOrderView(request, order_id):
     order = Order.objects.get(pk=order_id)
-    form = OrderUpdateForm(request.POST or None, request.FILES or None, instance=order)
+    form = OrderUpdateForm(request.POST or None, instance=order)
     context = {'order': order,
                'form': form}
     if form.is_valid():
@@ -102,7 +157,10 @@ def SearchProductView(request):
     if request.method == "POST":
         searched = request.POST['searched']
         Products = Product.objects.filter(name__contains=searched)
-        return render(request, 'Shop/search_product.html', {'searched': searched, 'Products': Products})
+        context = {'searched': searched,
+                   'Products': Products,
+                   }
+        return render(request, 'Shop/search_product.html', context)
     else:
         return render(request, 'Shop/search_product.html', {})
 

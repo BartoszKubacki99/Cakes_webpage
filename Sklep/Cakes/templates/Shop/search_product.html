@@ -8,11 +8,8 @@
         {% for product in Products %}
             <a href="{% url 'show-product' product.id %}">{{ product }}</a><br/>
         {% endfor %}
-
     {% else %}
         <h1>Brak zawartości do wyszukania O.o</h1>
     {% endif %}
-
-
 </center>
 {% endblock %}

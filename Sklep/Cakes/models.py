@@ -25,21 +25,22 @@ class Category(models.Model):
         return self.name
 
 
-class Product(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=True)
-    name = models.CharField(max_length=200)
+class Ingredients(models.Model):
+    name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    estimated_price = models.DecimalField(max_digits=6, decimal_places=2)
-    product_image = models.ImageField(null=True, blank=True, upload_to="images/")
+
     def __str__(self):
         return self.name
 
 
-class Ingredients(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
-    product = models.ManyToManyField(Product)
 
+class Product(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=True, null=True)
+    name = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    estimated_price = models.DecimalField(max_digits=6, decimal_places=2)
+    product_image = models.ImageField(null=True, blank=True, upload_to="images/")
+    ingredients_list = models.ManyToManyField(Ingredients, blank=True)
     def __str__(self):
         return self.name
 
@@ -48,7 +49,7 @@ class Order(models.Model):
     name = models.CharField(max_length=100, verbose_name='Imię')
     last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
     description = models.TextField(blank=True, verbose_name='Opis')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, verbose_name='produkt')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True, verbose_name='produkt')
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=100, verbose_name='numer telefonu:')
     adress = models.TextField(verbose_name='adres zamieszkania')
