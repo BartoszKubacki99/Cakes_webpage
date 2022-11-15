@@ -15,9 +15,8 @@
                     {{ ingredient }}<br/>
             {% endfor %}</p>
         {% if user.is_superuser %}
-      <a href="#" class="btn btn-primary">Dodaj składnik</a>
-      <a href="#" class="btn btn-primary">Edytuj</a>
-      <a href="#" class="btn btn-primary">Usuń<a/>
+      <a href="{% url 'update-product' product.id %}" class="btn btn-primary">Edytuj</a>
+      <a href="{% url 'delete-product' product.id %}" class="btn btn-primary">Usuń<a/>
         {% endif %}
   </div>
 </div>
